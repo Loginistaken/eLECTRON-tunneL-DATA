@@ -49,3 +49,13 @@ Static-137 Encoding	Entropy signature is aligned with universal constant (1/α �
 C++ Logic Evolving	Logic evolves via entropy streams; supports time-redundancy and self-healing
 RS232 + Serial Output	Legacy support lets 2000-era computers receive advanced messages
 Photonic Message Carrier	C++ logic can also be encoded into photon pulses for air-gap systems
+
+1	Electron Spin Chamber	Receives tunneled electrons carrying binary qubit states (↑↓) encoded in spin; serves as the data receptor for quantum messages. Matches QuantumMemory_Core/spin_wave.dat.
+2	Static Code Register	Stores legacy-coded instructions from earlier quantum epochs, such as commands meant for hardware circa 2000–2006. Related to ASI_Control_Interface/legacy_relay.ascii.
+3	Legacy Translation Engine	Interprets 2000s-era machine code into spintronic qubit format—tied to reverse compatibility and time-travel encoding.
+4	Qubit Tunnel Gate	Core element where quantum tunneling begins—bridges logical spin states into physical state for projection through time.
+5	Power Relay Coils	Provide supercooled magnetic energy to tunnel and stabilize qubit operations across the entire device.
+6	Memory Phase Crystals	Encodes entropy and phase-state logs, matching entropy_log_01.ent from your zip. Stores timing and decay signatures.
+7	ASI Core Protocol Matrix	Governs the AI-assisted spin pattern analysis and decoding. Drives autocomputation and identifies pattern anomalies.
+8	Photonic Emitter	Emits light-frequency signals based on quantum state collapse, potentially part of the return transmission to the past.
+9	Transparent Silicon Shell	A visual and functional insulator—electromagnetically neutral but allows diagnostic scanning and photonic flow.
