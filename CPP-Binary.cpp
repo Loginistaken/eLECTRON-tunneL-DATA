@@ -98,53 +98,206 @@ void triggerOffBoardUpdate() {
 #endif
 }
 
+// ========== UPDATED CPPWriter PAYLOAD BEGINS HERE ==========
 const char* cppWriterCode = R"cpp(
-// CPP-Writer: Interactive C++ Code Generator for Blockchain & Coin Development
+// CPP-Writer: Next-Gen C++ Copilot — Blockchain, Crypto, Binary, Explanations, and Dynamic Synthesis
 #include <iostream>
 #include <string>
 #include <vector>
+#include <regex>
 #include <sstream>
+#include <map>
+#include <algorithm>
+#include <iomanip>
+
+std::string explainCrypto(const std::string& topic) {
+    if (topic.find("sha256") != std::string::npos)
+        return "SHA-256 is a cryptographic hash function. It takes data and produces a 256-bit (32-byte) hash. Hash functions are one-way and collision-resistant, making them useful for data integrity and digital signatures.";
+    if (topic.find("ecdsa") != std::string::npos)
+        return "ECDSA (Elliptic Curve Digital Signature Algorithm) is used for signing messages with a private key and verifying with a public key. Bitcoin uses ECDSA for transaction signatures.";
+    if (topic.find("merkle") != std::string::npos)
+        return "A Merkle tree is a binary tree of hashes: each leaf is a hash of data, each parent is a hash of its children. This allows efficient integrity verification for large sets of data (like blockchain transactions).";
+    if (topic.find("public key") != std::string::npos)
+        return "Public key cryptography uses a key pair: a public key (shared) and a private key (secret). Data encrypted with one can only be decrypted with the other, enabling secure communication and digital signatures.";
+    if (topic.find("blockchain") != std::string::npos)
+        return "A blockchain is an append-only ledger of blocks, each containing data and a hash of the previous block. This creates an immutable chain, resistant to tampering.";
+    return "// [AI] Unknown topic. Try: sha256, ecdsa, merkle, blockchain, public key";
+}
+
+std::vector<std::string> known_keywords = {
+    "blockchain", "coin", "networking", "crypto", "smart contract", "thread-safe", "explain"
+};
+std::string suggestKeywords(const std::string& prompt) {
+    std::ostringstream oss;
+    oss << "// [AI] Unrecognized prompt: \"" << prompt << "\"\n";
+    oss << "// Suggestions:\n";
+    for (const auto& kw : known_keywords)
+        oss << "//   - " << kw << "\n";
+    oss << "// Type 'help' for usage examples.\n";
+    return oss.str();
+}
+
+std::string toHex(const std::string& input) {
+    std::ostringstream oss;
+    for (unsigned char c : input)
+        oss << std::hex << std::setw(2) << std::setfill('0') << (int)c;
+    return oss.str();
+}
+
+std::string generateBlockchainCode(const std::string& prompt) {
+    std::vector<std::string> fields = {"index", "prevHash", "data"};
+    std::smatch m;
+    if (std::regex_search(prompt, m, std::regex("fields?:\\s*([\\w, ]+)", std::regex_constants::icase))) {
+        std::string f = m[1];
+        std::istringstream iss(f);
+        fields.clear();
+        std::string field;
+        while (std::getline(iss, field, ',')) {
+            field.erase(std::remove_if(field.begin(), field.end(), ::isspace), field.end());
+            fields.push_back(field);
+        }
+    }
+    std::ostringstream code;
+    code << "struct Block {\n";
+    for (const auto& f : fields) code << "    std::string " << f << ";\n";
+    code << "};";
+    return code.str();
+}
+
+std::string generateCoinCode(const std::string& prompt) {
+    std::ostringstream code;
+    code << "class Coin {\npublic:\n    int supply;\n";
+    if (prompt.find("mint") != std::string::npos)
+        code << "    void mint(int amount) { supply += amount; }\n";
+    if (prompt.find("burn") != std::string::npos)
+        code << "    void burn(int amount) { if (amount <= supply) supply -= amount; }\n";
+    code << "};";
+    return code.str();
+}
+
+std::string generateCryptoCode(const std::string& prompt) {
+    if (prompt.find("sha256") != std::string::npos) {
+        return R"(#include <openssl/sha.h>
+std::string sha256(const std::string& data) {
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256((const unsigned char*)data.c_str(), data.size(), hash);
+    std::ostringstream result;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i)
+        result << std::hex << (int)hash[i];
+    return result.str();
+})";
+    }
+    if (prompt.find("merkle") != std::string::npos) {
+        return R"(std::string merkleRoot(const std::vector<std::string>& leaves) {
+    std::vector<std::string> hashes = leaves;
+    while (hashes.size() > 1) {
+        std::vector<std::string> newLevel;
+        for (size_t i = 0; i < hashes.size(); i += 2) {
+            std::string left = hashes[i];
+            std::string right = (i + 1 < hashes.size()) ? hashes[i + 1] : hashes[i];
+            newLevel.push_back(sha256(left + right));
+        }
+        hashes = newLevel;
+    }
+    return hashes[0];
+})";
+    }
+    if (prompt.find("ecdsa") != std::string::npos) {
+        return R"(// ECDSA signature/verification (conceptual, needs OpenSSL setup)
+#include <openssl/ecdsa.h>
+#include <openssl/obj_mac.h>
+// See OpenSSL docs for full implementation
+)";
+    }
+    return "// [AI] Crypto module: Try sha256, merkle, or ecdsa.";
+}
+
 class CPPWriter {
-    std::vector<std::string> sessionSnippets;
+    std::vector<std::string> codeHistory;
+    std::string lastModule;
+
 public:
     void greet() {
-        std::cout << "Welcome to CPP-Writer - C++ interactive blockchain coding helper!\n";
+        std::cout << "Welcome to Next-Gen CPP-Writer: Binary Copilot from the future.\n";
     }
-    void addSnippet(const std::string& code) {
-        sessionSnippets.push_back(code);
+    std::string processPrompt(const std::string& prompt) {
+        if (prompt.find("explain") == 0) {
+            std::string topic = prompt.substr(7);
+            std::string explanation = explainCrypto(topic);
+            codeHistory.push_back("// [Explain] " + topic + "\n" + explanation);
+            return explanation;
+        }
+        if (prompt == "help") {
+            return "// Available modules: blockchain, coin, crypto, explain\n"
+                   "// Example: create a blockchain with fields: number, hash, timestamp\n"
+                   "// Example: create a coin class with mint and burn methods\n"
+                   "// Example: explain merkle\n"
+                   "// Example: generate sha256 code\n";
+        }
+        if (std::regex_search(prompt, std::regex("blockchain", std::regex_constants::icase))) {
+            std::string code = generateBlockchainCode(prompt);
+            lastModule = code;
+            codeHistory.push_back(code);
+            return code;
+        }
+        if (std::regex_search(prompt, std::regex("coin|token", std::regex_constants::icase))) {
+            std::string code = generateCoinCode(prompt);
+            lastModule = code;
+            codeHistory.push_back(code);
+            return code;
+        }
+        if (std::regex_search(prompt, std::regex("sha256|ecdsa|merkle|crypto", std::regex_constants::icase))) {
+            std::string code = generateCryptoCode(prompt);
+            lastModule = code;
+            codeHistory.push_back(code);
+            return code;
+        }
+        if (prompt.find("make it thread-safe") != std::string::npos && !lastModule.empty()) {
+            std::ostringstream code;
+            code << "#include <mutex>\n";
+            if (lastModule.find("class Coin") != std::string::npos) {
+                code << lastModule.substr(0, lastModule.size()-2);
+                code << "    std::mutex mtx;\n";
+                if (lastModule.find("mint") != std::string::npos)
+                    code << "    void mint(int amount) { std::lock_guard<std::mutex> lock(mtx); supply += amount; }\n";
+                if (lastModule.find("burn") != std::string::npos)
+                    code << "    void burn(int amount) { std::lock_guard<std::mutex> lock(mtx); if (amount <= supply) supply -= amount; }\n";
+                code << "};";
+                lastModule = code.str();
+                codeHistory.push_back(lastModule);
+                return lastModule;
+            }
+            return "// [AI] Thread-safe refactor only implemented for Coin class in this demo.";
+        }
+        if (prompt.find("as binary") != std::string::npos && !lastModule.empty()) {
+            std::string hex = toHex(lastModule);
+            codeHistory.push_back("// [Binary] " + hex);
+            return "// [Binary hex of last module]\n" + hex;
+        }
+        return suggestKeywords(prompt);
     }
     void showHistory() {
-        std::cout << "Code snippets generated so far:\n";
-        for (size_t i = 0; i < sessionSnippets.size(); ++i) {
-            std::cout << i+1 << ": " << sessionSnippets[i] << "\n";
-        }
-    }
-    std::string generateCode(const std::string& prompt) {
-        if (prompt.find("blockchain") != std::string::npos) {
-            return "struct Block { int index; std::string prevHash; std::string data; };";
-        }
-        if (prompt.find("coin") != std::string::npos) {
-            return "class Coin { public: int supply; Coin(int s): supply(s) {} };";
-        }
-        return "// Code generation placeholder for: " + prompt;
+        std::cout << "// [History]\n";
+        for (const auto& c : codeHistory)
+            std::cout << c << "\n";
     }
 };
+
 int main() {
-    CPPWriter cppWriter;
-    cppWriter.greet();
-    std::string input;
+    CPPWriter writer;
+    writer.greet();
+    std::string prompt;
     while (true) {
-        std::cout << "\nEnter prompt (or 'exit' to quit): ";
-        std::getline(std::cin, input);
-        if (input == "exit") break;
-        std::string code = cppWriter.generateCode(input);
-        cppWriter.addSnippet(code);
-        std::cout << "Generated C++ code:\n" << code << "\n";
+        std::cout << "\n[User] > ";
+        std::getline(std::cin, prompt);
+        if (prompt == "exit") break;
+        std::cout << "[AI Output]\n" << writer.processPrompt(prompt) << "\n";
     }
-    cppWriter.showHistory();
+    writer.showHistory();
     return 0;
 }
 )cpp";
+// ========== UPDATED CPPWriter PAYLOAD ENDS HERE ==========
 
 class QubitInterpreter {
     std::map<char, std::string> spinMap;
