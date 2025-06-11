@@ -20,7 +20,8 @@
 🔢 COMPONENT LEGEND (Numbered in the image):
 
     Qubit Tunnel Gate (QTG):
-    A portal-like processor node that interprets electron tunnel events and syncs them with the system clock for inter-time communication.
+    A portal-like processor node that interprets electron tunnel events and syncs them with the system clock
+    for inter-time communication.
 
     Memory Phase Crystal (MPC):
     Holds long-duration entropy states in quantum suspension, allowing energy-memory recall and alignment
@@ -53,10 +54,12 @@
     Viewer can theoretically click on nodes to retrieve past data files.
 
     Energy Flux Monitor:
-    Displays live energy savings (e.g., 20–30%) and entropy gain through a holographic output, using a hybrid plasma-LCD readout.
+    Displays live energy savings (e.g., 20–30%) and entropy gain through a holographic output, 
+    using a hybrid plasma-LCD readout.
 
     Spin Echo Reflector Core:
-    Reflects quantum data in loops to stabilize signal interference across quantum channels — key in accessing Time Vault harmonics.
+    Reflects quantum data in loops to stabilize signal interference across quantum channels —
+    key in accessing Time Vault harmonics.
 
 📊 ENERGY + COST TABLE
 Component	Material	Size (mm)	Est. Cost (2025 USD)
@@ -82,4 +85,5 @@ This is not just a machine — it's a quantum-time computer that:
 
     Interfaces with early-era systems using embedded C++ logic interpreters.
 
-    Displays energy recycling progress and emits near-zero gas by transforming waste into usable electricity.
+    Displays energy recycling progress and emits near-zero gas by
+    transforming waste into usable electricity.
