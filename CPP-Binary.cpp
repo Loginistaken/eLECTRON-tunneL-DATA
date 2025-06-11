@@ -20,7 +20,71 @@
 #include <pwd.h>
 #include <unistd.h>
 #endif
+#include <algorithm>
+#include <iomanip>
 
+// --- Symbolic/LaTeX Math Output ---
+std::string symbolicMath(const std::string& query) {
+    if (query.find("quadratic") != std::string::npos)
+        return "// [LaTeX] Quadratic Formula: \n"
+               "// \\( x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\)\n"
+               "// C++: double x1 = (-b + sqrt(b*b-4*a*c))/(2*a);";
+    if (query.find("pythagoras") != std::string::npos || query.find("pythagorean") != std::string::npos)
+        return "// [LaTeX] Pythagorean Theorem: \n"
+               "// \\( a^2 + b^2 = c^2 \\)\n"
+               "// C++: double c = sqrt(a*a + b*b);";
+    return "// [Symbolic/LaTeX] Not recognized. Try: quadratic, pythagoras";
+}
+
+// --- Math Parser to C++ Code ---
+std::string mathParser(const std::string& formula) {
+    // This demo will only handle formulas of form: x^2 + 2*x*y + y^2
+    // Real parser can be added later.
+    if (formula.find("x^2 + 2*x*y + y^2") != std::string::npos)
+        return "// C++: double result = x*x + 2*x*y + y*y;";
+    if (formula.find("a^2 + b^2") != std::string::npos)
+        return "// C++: double result = a*a + b*b;";
+    return "// [Math Parser] Formula not recognized. Try: x^2 + 2*x*y + y^2";
+}
+
+// --- Step-by-Step Cryptography Math ---
+std::string cryptoSteps(const std::string& algo) {
+    if (algo.find("sha256") != std::string::npos)
+        return "// [SHA-256 Steps]\n"
+               "// 1. Pad the message to a multiple of 512 bits.\n"
+               "// 2. Parse into 512-bit blocks.\n"
+               "// 3. Initialize hash values (H0..H7).\n"
+               "// 4. For each block, perform 64 rounds of mixing using bitwise math:\n"
+               "//    a. Calculate T1, T2 using Σ, σ, Ch, Maj, etc.\n"
+               "//    b. Update a..h variables.\n"
+               "// 5. Output is H0||H1||...||H7 (256 bits).\n"
+               "// [LaTeX] \\( H(i) = H(i-1) + \\, \\text{SHA256Round}(M(i), K) \\)";
+    if (algo.find("ecdsa") != std::string::npos)
+        return "// [ECDSA Steps]\n"
+               "// 1. Select random k < n\n"
+               "// 2. Calculate r = (kG)_x mod n\n"
+               "// 3. Calculate s = k^{-1} (z + r*d) mod n\n"
+               "// 4. Signature is (r, s)\n"
+               "// [LaTeX] \\( s = k^{-1}(z + r d_A) \\bmod n \\)";
+    return "// [Crypto Steps] Try: sha256, ecdsa";
+}
+
+// --- Quantum Simulation Math ---
+std::string quantumMath(const std::string& prompt) {
+    if (prompt.find("measurement probability") != std::string::npos)
+        return "// For qubit |ψ⟩ = α|0⟩ + β|1⟩, probability of measuring |0⟩ is |α|^2\n"
+               "// [LaTeX] P(0) = |\\alpha|^2,   P(1) = |\\beta|^2\n"
+               "// C++: double p0 = norm(alpha); double p1 = norm(beta);";
+    if (prompt.find("state vector") != std::string::npos)
+        return "// Qubit state vector: |ψ⟩ = α|0⟩ + β|1⟩\n"
+               "// [LaTeX] |\\psi\\rangle = \\alpha|0\\rangle + \\beta|1\\rangle";
+    if (prompt.find("pauli-x") != std::string::npos)
+        return "// Pauli-X (NOT) matrix:\n"
+               "// [LaTeX]\n"
+               "// \\( X = \\begin{bmatrix} 0 & 1 \\\\ 1 & 0 \\end{bmatrix} \\)\n"
+               "// C++: std::vector<std::vector<int>> X = {{0,1},{1,0}};";
+    return "// [Quantum Math] Try: measurement probability, state vector, pauli-x";
+}
 namespace fs = std::filesystem;
 
 std::string getHomeDirectory() {
