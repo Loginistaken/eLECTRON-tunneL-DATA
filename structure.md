@@ -2,7 +2,8 @@
 🧊 STRUCTURE OVERVIEW:
 
     Transparent Shell (entire outer structure):
-    Made of multi-doped silicon composite — each side doped with different elements (boron, phosphorus, germanium, and gallium) to produce varied electrical and thermal properties for enhanced quantum feedback.
+    Made of multi-doped silicon composite — each side doped with different elements (boron, phosphorus, germanium, and gallium) 
+    to produce varied electrical and thermal properties for enhanced quantum feedback.
 
     Dimensions:
 
@@ -22,13 +23,16 @@
     A portal-like processor node that interprets electron tunnel events and syncs them with the system clock for inter-time communication.
 
     Memory Phase Crystal (MPC):
-    Holds long-duration entropy states in quantum suspension, allowing energy-memory recall and alignment with historical data (e.g., from early 2000s files).
+    Holds long-duration entropy states in quantum suspension, allowing energy-memory recall and alignment
+    with historical data (e.g., from early 2000s files).
 
     Entropy Coil Array:
-    Coiled niobium alloy conductors recycle thermal radiation into stored charge. Also serves as a static-field absorber to reduce waste energy.
+    Coiled niobium alloy conductors recycle thermal radiation into stored charge.
+    Also serves as a static-field absorber to reduce waste energy.
 
     Electron Spin Chamber:
-    Reads the spin states of tunneled electrons and converts them into usable data streams — the heart of the spintronic decoder system.
+    Reads the spin states of tunneled electrons and converts them into usable data streams — 
+    the heart of the spintronic decoder system.
 
     Silicon Doped Quadrant Panel (4 faces):
 
@@ -41,10 +45,12 @@
         Right side: Gallium – high-voltage protection.
 
     INREDD Unit (Infra-Red Electron Decoding Device):
-    Converts near-infrared emissions and heat from mining activity into usable signals for decoding energy flow, also measuring tunnel directionality.
+    Converts near-infrared emissions and heat from mining activity into usable signals for decoding energy flow, 
+    also measuring tunnel directionality.
 
     TimeVault File Chamber:
-    A visual storage projection where each file (like .cpp, .zip) is stored and projected for interaction. Viewer can theoretically click on nodes to retrieve past data files.
+    A visual storage projection where each file (like .cpp, .zip) is stored and projected for interaction. 
+    Viewer can theoretically click on nodes to retrieve past data files.
 
     Energy Flux Monitor:
     Displays live energy savings (e.g., 20–30%) and entropy gain through a holographic output, using a hybrid plasma-LCD readout.
