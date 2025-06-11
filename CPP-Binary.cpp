@@ -193,18 +193,60 @@ std::string receiveElectronStream() {
     return "01000011 00100001";
 }
 
-// Binary to ASCII translation
-std::string binaryToAscii(const std::string& binaryStream) {
-    std::string output;
-    size_t len = binaryStream.size();
-    for (size_t i = 0; i + 8 <= len;) {
-        std::string byte = binaryStream.substr(i, 8);
-        char chr = static_cast<char>(std::stoi(byte, NULL, 2));
-        output += chr;
-        i += 8;
-    }
-    return output;
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iostream>
+
+// You may already have this function, but ensure you can decode a binary string of 8 chars (one byte)
+char binaryToChar(const std::string& binary) {
+    return static_cast<char>(std::stoi(binary, nullptr, 2));
 }
+
+// Process an entire string of binary (assumes input is '0' and '1' chars, multiples of 8)
+std::string translateBinaryPage(const std::string& binaryPage) {
+    std::string cppText;
+    for (size_t i = 0; i + 8 <= binaryPage.size(); i += 8) {
+        std::string byteStr = binaryPage.substr(i, 8);
+        cppText += binaryToChar(byteStr);
+    }
+    return cppText;
+}
+
+// Example function to read a "page" of binary from a file (or any stream)
+std::string readBinaryPage(std::istream& input, size_t pageSizeInBytes) {
+    std::string page;
+    char ch;
+    size_t count = 0;
+    while (input.get(ch) && count < pageSizeInBytes * 8) { // 8 bits per byte
+        if (ch == '0' || ch == '1') {
+            page += ch;
+            count++;
+        }
+    }
+    return page;
+}
+
+// Main loop to process all pages and trigger next doc download
+void processBinaryDocument(const std::string& inputFilePath) {
+    std::ifstream infile(inputFilePath);
+    const size_t pageSize = 1024; // 1 KB page, adjust as needed
+
+    while (!infile.eof()) {
+        std::string page = readBinaryPage(infile, pageSize);
+        if (page.empty()) break;
+
+        std::string cppCode = translateBinaryPage(page);
+        // Here you could write cppCode to a file, display it, or further process it
+
+        // --- Insert your auto-trigger for next doc download here ---
+        // For example, if you use threads or async IO, trigger the next download
+        // std::thread(downloadNextDoc, nextDocUrl).detach();
+
+        std::cout << cppCode; // For demonstration
+    }
+}
+
 
 // User guidance for received code or message
 void showGuidance(const std::string& code) {
