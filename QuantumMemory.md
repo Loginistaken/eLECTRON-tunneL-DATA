@@ -83,3 +83,67 @@ node_relay_diagram.json
     A JSON schematic of spin-node locations and signal routing.
 
     Useful for simulation, validation, or visual UIs.
+// entropy_asi_logic.cpp – C++ Core ASI Evolution Logic for Time Vault Ant Miner v3033
+
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <cmath>
+#include <ctime>
+#include <random>
+#include <string>
+
+// Language snapshot archive (code DNA evolution vault)
+std::vector<std::string> languageDNA = {
+    "C", "Pascal", "C++", "Perl", "Python", "Java",
+    "JavaScript", "PHP", "C#", "Ruby", "Go",
+    "Rust", "Kotlin", "Swift", "TypeScript"
+};
+
+// Memory core representing evolving entropy state
+struct EntropyVault {
+    double entropyLevel;
+    std::string currentLanguage;
+    std::time_t lastUpdated;
+
+    EntropyVault() {
+        entropyLevel = 0.05;
+        currentLanguage = "C";
+        lastUpdated = std::time(nullptr);
+    }
+
+    void evolve(double externalStimulus) {
+        entropyLevel += externalStimulus * 0.003 + randomFluctuation();
+        if (entropyLevel > 1.0) entropyLevel = 1.0;
+
+        int index = std::min((int)(entropyLevel * languageDNA.size()), (int)languageDNA.size() - 1);
+        currentLanguage = languageDNA[index];
+        lastUpdated = std::time(nullptr);
+    }
+
+    void displayState() {
+        std::cout << "[Entropy Evolution Vault]\n";
+        std::cout << "Entropy Level: " << entropyLevel << "\n";
+        std::cout << "Language Mode: " << currentLanguage << "\n";
+        std::cout << "Updated: " << std::ctime(&lastUpdated) << "\n";
+    }
+
+private:
+    double randomFluctuation() {
+        static std::mt19937 rng(std::random_device{}());
+        std::uniform_real_distribution<double> dist(-0.01, 0.01);
+        return dist(rng);
+    }
+};
+
+int main() {
+    EntropyVault vault;
+    for (int i = 0; i < 100; ++i) {
+        double heat = std::sin(i * 0.1) * 5 + 10; // Simulated thermal reading
+        double qubitResponse = std::cos(i * 0.15) * 2; // Simulated quantum data
+
+        vault.evolve((heat + qubitResponse) / 25.0);
+        vault.displayState();
+    }
+    return 0;
+}
