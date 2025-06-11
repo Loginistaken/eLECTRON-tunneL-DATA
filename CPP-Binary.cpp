@@ -457,7 +457,102 @@ int main() {
 }
 )cpp";
 // ========== UPDATED CPPWriter PAYLOAD ENDS HERE ==========
+// === Quantum Binary Language Interpreter (Electron Stream to C++/Guidance) ===
+#include <ctime>
 
+// Simulate quantum noise (random bitflip in a string of bits)
+void applyQuantumNoise(std::string& bits, int num_flips = 1) {
+    srand(static_cast<unsigned>(time(0)));
+    for (int i = 0; i < num_flips && bits.size(); ++i) {
+        size_t idx = rand() % bits.size();
+        bits[idx] = (bits[idx] == '0') ? '1' : '0';
+    }
+}
+
+// Read binary stream from file (as '0' and '1' chars)
+std::string readElectronStreamFromFile(const std::string& filename) {
+    std::ifstream fin(filename.c_str());
+    if (!fin) {
+        std::cerr << "[ERROR] Could not open file: " << filename << std::endl;
+        return "";
+    }
+    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
+    return bits;
+}
+
+// Simulated quantum electron data as bitstring
+std::string receiveElectronStream() {
+    // Example: "01000011 00100001" => "C!"
+    return "01000011 00100001";
+}
+
+// Binary to ASCII translation
+std::string binaryToAscii(const std::string& binaryStream) {
+    std::string output;
+    size_t len = binaryStream.size();
+    for (size_t i = 0; i + 8 <= len;) {
+        std::string byte = binaryStream.substr(i, 8);
+        char chr = static_cast<char>(std::stoi(byte, NULL, 2));
+        output += chr;
+        i += 8;
+    }
+    return output;
+}
+
+// User guidance for received code or message
+void showGuidance(const std::string& code) {
+    std::cout << "[User Guidance] Code/message received via quantum binary stream:\n";
+    std::cout << "----------------------------------------\n";
+    std::cout << code << "\n";
+    std::cout << "----------------------------------------\n";
+    std::cout << "To use this code:\n";
+    std::cout << "1. Copy and paste into a .cpp file.\n";
+    std::cout << "2. Compile with your C++ compiler (g++, Visual C++, etc).\n";
+    std::cout << "3. Run the program.\n";
+}
+
+// Download trigger (reuse existing triggerDownload() if present)
+void triggerDownload(const std::string& url) {
+#if defined(_WIN32)
+    ShellExecuteA(NULL, "open", url.c_str(), NULL, NULL, SW_SHOWNORMAL);
+#elif defined(__APPLE__)
+    std::string command = "open " + url;
+    system(command.c_str());
+#else
+    std::string command = "xdg-open " + url + " &";
+    system(command.c_str());
+#endif
+}
+
+// Main interpreter function (call from main() as needed)
+void quantumBinaryInterpreterMain(const std::string& inputFile = "") {
+    std::cout << "\n=== Quantum Binary Language Interpreter ===\n";
+    std::string binaryStream;
+    if (!inputFile.empty()) {
+        std::cout << "Reading electron stream from file: " << inputFile << "\n";
+        binaryStream = readElectronStreamFromFile(inputFile);
+    } else {
+        std::cout << "Receiving electron stream from quantum channel...\n";
+        binaryStream = receiveElectronStream();
+    }
+
+    // Simulate quantum noise
+    applyQuantumNoise(binaryStream, 2);
+
+    std::cout << "Raw received binary: " << binaryStream << "\n";
+    std::string ascii = binaryToAscii(binaryStream);
+    showGuidance(ascii);
+
+    // Trigger a download/communication handshake
+    std::string downloadUrl = "https://your-server.com/quantum_payload.bin";
+    std::cout << "Triggering download/communication handshake...\n";
+    triggerDownload(downloadUrl);
+
+    std::cout << "Quantum Interpreter Done.\n";
+}
 class QubitInterpreter {
     std::map<char, std::string> spinMap;
 public:
