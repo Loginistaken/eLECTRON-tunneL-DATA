@@ -111,9 +111,51 @@ main
 ```
 **Explanation:**  
 Demonstrates recursion, local bindings, and pattern-safe arithmetic. A scientist could reproduce this via a closure-based evaluation model that maps directly to an abstract stack machine.
+4. Clojure (2007)
+
+    Inventor: Rich Hickey
+    Why it was needed: Java was verbose and not well-suited for functional programming. Clojure brought LISP’s power to the JVM.
+    Computer Update Context: JVM is mature; multicore CPUs require concurrency models.
+    Scientific Re-creation Notes: Start with a LISP parser, target JVM bytecode, add persistent data structures, and STM (Software Transactional Memory).
+    Key Innovations: Persistent/immutable data structures, STM for concurrency, macro system.
+    Use Case: Concurrent services, scripting, data pipelines.
+
+Code Example:
+Clojure
+
+(ns example.core)
+
+(defn greet [name]
+  (println (str "Hello, " name " from Clojure!")))
+
+(defn fib [n]
+  (if (< n 2)
+    n
+    (+ (fib (- n 1)) (fib (- n 2)))))
+
+(defn concurrent-demo []
+  (let [counter (ref 0)]
+    (dosync
+      (alter counter inc)
+      (alter counter inc))
+    @counter))
+
+(defn -main []
+  (greet "Clojure Developer")
+  (println "Fibonacci of 6:" (fib 6))
+  (println "Concurrent counter value:" (concurrent-demo)))
+
+Explanation:
+Demonstrates namespaces, pure functions, recursion, immutable state, and STM for concurrency.
+
+How to Build:
+
+    Parse LISP syntax and emit JVM bytecode.
+    Implement persistent vectors and maps using path-copying trees.
+    Build an STM layer with atomic operations for concurrency.
 
 ---
-16. Go (Golang)
+5. Go (Golang)
 
 Year: 2009
 Creator: Google (Robert Griesemer, Rob Pike, Ken Thompson)
