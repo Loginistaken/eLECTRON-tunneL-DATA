@@ -113,7 +113,415 @@ main
 Demonstrates recursion, local bindings, and pattern-safe arithmetic. A scientist could reproduce this via a closure-based evaluation model that maps directly to an abstract stack machine.
 
 ---
+16. Go (Golang)
 
+Year: 2009
+Creator: Google (Robert Griesemer, Rob Pike, Ken Thompson)
+Purpose: Systems programming, scalable network servers, and concurrent applications.
+Key Concepts:
+
+    Goroutines for lightweight concurrency
+    Channels for communication
+    Statically typed with garbage collection
+    Simple syntax, fast compilation
+
+Example Code (Go):
+Go
+
+package main
+import (
+    "fmt"
+    "time"
+)
+
+// Function with parameters and return type
+func add(a int, b int) int {
+    return a + b
+}
+
+// Goroutine example
+func sayHello(name string) {
+    fmt.Printf("Hello, %s!\n", name)
+}
+
+func main() {
+    fmt.Println("Hello from Go!")
+    fmt.Printf("2 + 3 = %d\n", add(2, 3))
+
+    go sayHello("Concurrent World") // launches goroutine
+    time.Sleep(100 * time.Millisecond) // wait for goroutine
+
+    // Channel example
+    ch := make(chan string)
+    go func() { ch <- "Message from goroutine" }()
+    msg := <-ch
+    fmt.Println(msg)
+}
+
+Notes:
+Go powers Kubernetes, Docker, and scalable cloud software.
+17. Rust
+
+Year: 2010
+Creator: Mozilla (Graydon Hoare)
+Purpose: Memory-safe, high-performance systems programming.
+Key Concepts:
+
+    Ownership and borrowing for safety
+    No garbage collector
+    Zero-cost abstractions
+    Pattern matching, enums, traits (interfaces)
+
+Example Code (Rust):
+Rust
+
+fn main() {
+    println!("Hello from Rust!");
+
+    // Variable with type inference
+    let x = 5;
+    let y: i32 = 10;
+    println!("Sum: {}", add(x, y));
+
+    // Ownership example
+    let s = String::from("ownership");
+    takes_ownership(s);
+
+    // Borrowing (references)
+    let z = 20;
+    print_ref(&z);
+
+    // Pattern matching
+    match_option(Some(42));
+}
+
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
+fn takes_ownership(s: String) {
+    println!("Took ownership of: {}", s);
+}
+
+fn print_ref(z: &i32) {
+    println!("Reference: {}", z);
+}
+
+fn match_option(opt: Option<i32>) {
+    match opt {
+        Some(val) => println!("Got value: {}", val),
+        None => println!("Got nothing"),
+    }
+}
+
+Notes:
+Rust is used for secure browsers, OS kernels, and embedded systems.
+18. Kotlin
+
+Year: 2011
+Creator: JetBrains
+Purpose: Modern, concise JVM language; Android development.
+Key Concepts:
+
+    Null safety
+    Interoperable with Java
+    Functional programming support
+    Extension functions
+
+Example Code (Kotlin):
+Kotlin
+
+fun main() {
+    println("Hello from Kotlin!")
+
+    val sum = add(4, 5)
+    println("Sum: $sum")
+
+    // Null safety
+    val maybeString: String? = null
+    println(maybeString?.length ?: "No value")
+
+    // Data class and when expression
+    val person = Person("Ada", 28)
+    greet(person)
+
+    // Lambdas and filter
+    val numbers = listOf(1, 2, 3, 4, 5)
+    println(numbers.filter { it % 2 == 0 })
+}
+
+fun add(a: Int, b: Int): Int = a + b
+
+data class Person(val name: String, val age: Int)
+
+fun greet(person: Person) {
+    when (person.age) {
+        in 0..17 -> println("Hi, young ${person.name}")
+        else -> println("Hello, ${person.name}")
+    }
+}
+
+Notes:
+Preferred for Android; full-featured, safe, and expressive.
+19. Dart
+
+Year: 2011
+Creator: Google
+Purpose: Web and mobile applications (notably Flutter).
+Key Concepts:
+
+    Optional static typing
+    Class-based OOP
+    Hot reload for UI dev
+    Asynchronous programming (async/await)
+
+Example Code (Dart):
+Dart
+
+void main() {
+  print("Hello from Dart!");
+
+  int sum = add(2, 3);
+  print("Sum: $sum");
+
+  // Async example
+  fetchData().then((value) => print(value));
+
+  // Class and inheritance
+  final dog = Dog("Fido");
+  dog.speak();
+}
+
+int add(int a, int b) => a + b;
+
+Future<String> fetchData() async {
+  await Future.delayed(Duration(seconds: 1));
+  return "Fetched data!";
+}
+
+class Animal {
+  String name;
+  Animal(this.name);
+
+  void speak() => print("Animal noise");
+}
+
+class Dog extends Animal {
+  Dog(String name) : super(name);
+  @override
+  void speak() => print("$name says woof!");
+}
+
+Notes:
+Dart is the native language for Flutter for cross-platform apps.
+20. Elixir
+
+Year: 2011
+Creator: José Valim
+Purpose: Scalable, fault-tolerant distributed systems (Erlang VM).
+Key Concepts:
+
+    Functional programming
+    Immutable data
+    Actor concurrency (processes and message passing)
+    Pattern matching
+
+Example Code (Elixir):
+Elixir
+
+defmodule Example do
+  def hello(name) do
+    IO.puts("Hello, #{name} from Elixir!")
+  end
+
+  def sum(a, b), do: a + b
+
+  def start do
+    hello("World")
+    IO.puts("2 + 3 = #{sum(2, 3)}")
+
+    spawn(fn -> IO.puts("Concurrent process") end)
+    receive do
+      after 100 -> IO.puts("Done waiting")
+    end
+  end
+end
+
+Example.start()
+
+Notes:
+Elixir is used for scalable web apps and real-time systems.
+21. TypeScript
+
+Year: 2012
+Creator: Microsoft
+Purpose: Large-scale JavaScript development with static types.
+Key Concepts:
+
+    Type annotations
+    Interfaces and generics
+    Superset of JavaScript
+    Transpiles to JS
+
+Example Code (TypeScript):
+TypeScript
+
+function greet(name: string): void {
+    console.log(`Hello, ${name} from TypeScript!`);
+}
+
+let msg: string = "Hello from TypeScript!";
+console.log(msg);
+
+interface Person {
+    name: string;
+    age: number;
+}
+
+const ada: Person = { name: "Ada", age: 28 };
+console.log(`Name: ${ada.name}, Age: ${ada.age}`);
+
+function sum(a: number, b: number): number {
+    return a + b;
+}
+
+console.log(`2 + 3 = ${sum(2, 3)}`);
+
+Notes:
+Key to Angular, VS Code, and enterprise JS projects.
+22. Julia
+
+Year: 2012
+Creator: Jeff Bezanson, Stefan Karpinski, Viral B. Shah, Alan Edelman
+Purpose: High-performance scientific and numerical computing.
+Key Concepts:
+
+    Multiple dispatch
+    Dynamic and static typing
+    JIT compilation
+    Easy math syntax, fast loops
+
+Example Code (Julia):
+Julia
+
+function greet(name)
+    println("Hello, $name from Julia!")
+end
+
+function sum(a::Int, b::Int)::Int
+    return a + b
+end
+
+greet("World")
+println("2 + 3 = ", sum(2, 3))
+
+# Multiple dispatch
+foo(x::Int) = println("Integer: $x")
+foo(x::String) = println("String: $x")
+
+foo(10)
+foo("ten")
+
+# Vectorized operations
+v = [1, 2, 3]
+println(v .* 2)  # [2, 4, 6]
+
+Notes:
+Julia is used for data science, AI, and scientific computing.
+23. Swift
+
+Year: 2014
+Creator: Apple (Chris Lattner et al.)
+Purpose: iOS/macOS app development, modern C/C++ replacement.
+Key Concepts:
+
+    Strong typing and safety
+    Optionals for null safety
+    Protocols (interfaces), generics
+    Value types, closures, pattern matching
+
+Example Code (Swift):
+Swift
+
+import Foundation
+
+func greet(name: String) {
+    print("Hello, \(name) from Swift!")
+}
+
+let msg: String = "Hello from Swift!"
+print(msg)
+
+// Optionals and safe unwrapping
+var maybe: String? = nil
+print(maybe ?? "No value")
+
+// Structs and enums
+struct Person {
+    let name: String
+    var age: Int
+}
+
+let ada = Person(name: "Ada", age: 28)
+print("Name: \(ada.name), Age: \(ada.age)")
+
+enum Direction {
+    case north, south, east, west
+}
+
+let dir: Direction = .north
+switch dir {
+case .north: print("Going north")
+default: print("Other direction")
+}
+
+Notes:
+Swift replaced Objective-C and is open source.
+24. Crystal
+
+Year: 2014
+Creator: Ary Borenszweig, Brian Cardiff, Juan Wajnerman
+Purpose: Fast, compiled language with Ruby-like syntax.
+Key Concepts:
+
+    Statically typed, inferred
+    Macros, generics
+    High performance
+
+Example Code (Crystal):
+Crystal
+
+def greet(name : String)
+  puts "Hello, #{name} from Crystal!"
+end
+
+greet("World")
+
+# Types and functions
+def add(a : Int32, b : Int32) : Int32
+  a + b
+end
+
+puts "2 + 3 = #{add(2, 3)}"
+
+# Class and inheritance
+class Animal
+  def speak
+    puts "Animal noise"
+  end
+end
+
+class Dog < Animal
+  def speak
+    puts "Woof!"
+  end
+end
+
+dog = Dog.new
+dog.speak
+
+Notes:
+Crystal is used for fast web APIs and scripting.
 # Programming Languages & Tools (2021–2025): Expansion for Scientific Backward Engineering
 
 ## Introduction
