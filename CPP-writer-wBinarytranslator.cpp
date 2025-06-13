@@ -172,7 +172,17 @@ void applyQuantumNoise(std::string& bits, int num_flips = 1) {
         bits[idx] = (bits[idx] == '0') ? '1' : '0';
     }
 }
-
+std::string binaryToAscii(const std::string& binaryStream) {
+    std::string output;
+    size_t len = binaryStream.size();
+    for (size_t i = 0; i + 8 <= len;) {
+        std::string byte = binaryStream.substr(i, 8);
+        char chr = static_cast<char>(std::stoi(byte, NULL, 2));
+        output += chr;
+        i += 8;
+    }
+    return output;
+}
 // Read binary stream from file (as '0' and '1' chars)
 std::string readElectronStreamFromFile(const std::string& filename) {
     std::ifstream fin(filename.c_str());
@@ -186,12 +196,26 @@ std::string readElectronStreamFromFile(const std::string& filename) {
     bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
     return bits;
 }
-
+std::string readElectronStreamFromFile(const std::string& filename) {
+    std::ifstream fin(filename.c_str());
+    if (!fin) { /* error handling */ }
+    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
+    return bits;
+}
 // Simulated quantum electron data as bitstring
 std::string receiveElectronStream() {
     // Example: "01000011 00100001" => "C!"
     return "01000011 00100001";
 }
+std::string binary = "01001000 01100101 01101100 01101100 01101111 00101100 00100000 01010111 01101111 01110010 01101100 01100100 00100001"; // "Hello, World!"
+// Remove spaces if present
+binary.erase(remove(binary.begin(), binary.end(), ' '), binary.end());
+// Convert to ASCII
+std::string text = binaryToAscii(binary);
+std::cout << text << std::endl; // Output: Hello, World!
 
 #include <fstream>
 #include <string>
