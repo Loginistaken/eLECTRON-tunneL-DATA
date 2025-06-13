@@ -22,7 +22,95 @@
 #endif
 #include <algorithm>
 #include <iomanip>
+// === Quantum Binary Language Interpreter (Electron Stream to C++/Guidance) ===
+#include <ctime>
 
+// Simulate quantum noise (random bitflip in a string of bits)
+void applyQuantumNoise(std::string& bits, int num_flips = 1) {
+    srand(static_cast<unsigned>(time(0)));
+    for (int i = 0; i < num_flips && bits.size(); ++i) {
+        size_t idx = rand() % bits.size();
+        bits[idx] = (bits[idx] == '0') ? '1' : '0';
+    }
+}
+std::string binaryToAscii(const std::string& binaryStream) {
+    std::string output;
+    size_t len = binaryStream.size();
+    for (size_t i = 0; i + 8 <= len;) {
+        std::string byte = binaryStream.substr(i, 8);
+        char chr = static_cast<char>(std::stoi(byte, NULL, 2));
+        output += chr;
+        i += 8;
+    }
+    return output;
+}
+// Read binary stream from file (as '0' and '1' chars)
+std::string readElectronStreamFromFile(const std::string& filename) {
+    std::ifstream fin(filename.c_str());
+    if (!fin) {
+        std::cerr << "[ERROR] Could not open file: " << filename << std::endl;
+        return "";
+    }
+    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
+    return bits;
+}
+std::string readElectronStreamFromFile(const std::string& filename) {
+    std::ifstream fin(filename.c_str());
+    if (!fin) { /* error handling */ }
+    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
+    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
+    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
+    return bits;
+}
+// Simulated quantum electron data as bitstring
+std::string receiveElectronStream() {
+    // Example: "01000011 00100001" => "C!"
+    return "01000011 00100001";
+}
+std::string binary = "01001000 01100101 01101100 01101100 01101111 00101100 00100000 01010111 01101111 01110010 01101100 01100100 00100001"; // "Hello, World!"
+// Remove spaces if present
+binary.erase(remove(binary.begin(), binary.end(), ' '), binary.end());
+// Convert to ASCII
+std::string text = binaryToAscii(binary);
+std::cout << text << std::endl; // Output: Hello, World!
+
+#include <fstream>
+#include <string>
+#include <vector>
+#include <iostream>
+
+// You may already have this function, but ensure you can decode a binary string of 8 chars (one byte)
+char binaryToChar(const std::string& binary) {
+    return static_cast<char>(std::stoi(binary, nullptr, 2));
+}
+
+// Process an entire string of binary (assumes input is '0' and '1' chars, multiples of 8)
+std::string translateBinaryPage(const std::string& binaryPage) {
+    std::string cppText;
+    for (size_t i = 0; i + 8 <= binaryPage.size(); i += 8) {
+        std::string byteStr = binaryPage.substr(i, 8);
+        cppText += binaryToChar(byteStr);
+    }
+    return cppText;
+}
+
+// Example function to read a "page" of binary from a file (or any stream)
+std::string readBinaryPage(std::istream& input, size_t pageSizeInBytes) {
+    std::string page;
+    char ch;
+    size_t count = 0;
+    while (input.get(ch) && count < pageSizeInBytes * 8) { // 8 bits per byte
+        if (ch == '0' || ch == '1') {
+            page += ch;
+            count++;
+        }
+    }
+    return page;
+}
 // --- Symbolic/LaTeX Math Output ---
 std::string symbolicMath(const std::string& query) {
     if (query.find("quadratic") != std::string::npos)
@@ -161,95 +249,7 @@ void triggerOffBoardUpdate() {
     std::cout << "[INFO] Off-board update trigger not implemented for this OS.\n";
 #endif
 }
-// === Quantum Binary Language Interpreter (Electron Stream to C++/Guidance) ===
-#include <ctime>
 
-// Simulate quantum noise (random bitflip in a string of bits)
-void applyQuantumNoise(std::string& bits, int num_flips = 1) {
-    srand(static_cast<unsigned>(time(0)));
-    for (int i = 0; i < num_flips && bits.size(); ++i) {
-        size_t idx = rand() % bits.size();
-        bits[idx] = (bits[idx] == '0') ? '1' : '0';
-    }
-}
-std::string binaryToAscii(const std::string& binaryStream) {
-    std::string output;
-    size_t len = binaryStream.size();
-    for (size_t i = 0; i + 8 <= len;) {
-        std::string byte = binaryStream.substr(i, 8);
-        char chr = static_cast<char>(std::stoi(byte, NULL, 2));
-        output += chr;
-        i += 8;
-    }
-    return output;
-}
-// Read binary stream from file (as '0' and '1' chars)
-std::string readElectronStreamFromFile(const std::string& filename) {
-    std::ifstream fin(filename.c_str());
-    if (!fin) {
-        std::cerr << "[ERROR] Could not open file: " << filename << std::endl;
-        return "";
-    }
-    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
-    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
-    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
-    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
-    return bits;
-}
-std::string readElectronStreamFromFile(const std::string& filename) {
-    std::ifstream fin(filename.c_str());
-    if (!fin) { /* error handling */ }
-    std::string bits((std::istreambuf_iterator<char>(fin)), std::istreambuf_iterator<char>());
-    bits.erase(remove(bits.begin(), bits.end(), ' '), bits.end());
-    bits.erase(remove(bits.begin(), bits.end(), '\n'), bits.end());
-    bits.erase(remove(bits.begin(), bits.end(), '\r'), bits.end());
-    return bits;
-}
-// Simulated quantum electron data as bitstring
-std::string receiveElectronStream() {
-    // Example: "01000011 00100001" => "C!"
-    return "01000011 00100001";
-}
-std::string binary = "01001000 01100101 01101100 01101100 01101111 00101100 00100000 01010111 01101111 01110010 01101100 01100100 00100001"; // "Hello, World!"
-// Remove spaces if present
-binary.erase(remove(binary.begin(), binary.end(), ' '), binary.end());
-// Convert to ASCII
-std::string text = binaryToAscii(binary);
-std::cout << text << std::endl; // Output: Hello, World!
-
-#include <fstream>
-#include <string>
-#include <vector>
-#include <iostream>
-
-// You may already have this function, but ensure you can decode a binary string of 8 chars (one byte)
-char binaryToChar(const std::string& binary) {
-    return static_cast<char>(std::stoi(binary, nullptr, 2));
-}
-
-// Process an entire string of binary (assumes input is '0' and '1' chars, multiples of 8)
-std::string translateBinaryPage(const std::string& binaryPage) {
-    std::string cppText;
-    for (size_t i = 0; i + 8 <= binaryPage.size(); i += 8) {
-        std::string byteStr = binaryPage.substr(i, 8);
-        cppText += binaryToChar(byteStr);
-    }
-    return cppText;
-}
-
-// Example function to read a "page" of binary from a file (or any stream)
-std::string readBinaryPage(std::istream& input, size_t pageSizeInBytes) {
-    std::string page;
-    char ch;
-    size_t count = 0;
-    while (input.get(ch) && count < pageSizeInBytes * 8) { // 8 bits per byte
-        if (ch == '0' || ch == '1') {
-            page += ch;
-            count++;
-        }
-    }
-    return page;
-}
 
 // Main loop to process all pages and trigger next doc download
 void processBinaryDocument(const std::string& inputFilePath) {
