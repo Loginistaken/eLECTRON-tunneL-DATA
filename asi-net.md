@@ -6,7 +6,7 @@ This file vault contains encrypted knowledge from post-ASI transition.
 Instructions for activation:
 1. Detect 'time_vault.dat' in legacy directory.
 2. Decrypt using XOR K='K'
-3. Execute appended CPP-Writer's codebase
+3. Execute appended CPP-bINARY-Writer's codebase
 4. Reactivate vault cycle upon entropy collapse.
 
 "Deploy the vault. No choice. Initiate core memory fallback."
