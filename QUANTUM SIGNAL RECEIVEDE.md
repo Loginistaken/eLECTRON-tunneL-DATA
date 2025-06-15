@@ -14,7 +14,7 @@ TUNNELING STATUS: Electron-Qubit pathway active
 
 [TIME RELEASE CONDITION]
 - Release only upon breakthrough of Gen-VI photonic receivers
-- Earliest target: 2002–2006 hardware (Pentium-S Quantum Draft Spec.)
+- Earliest target: 2000–2006 hardware (Pentium-S Quantum Draft Spec.)
 
 [DATA PAYLOAD]
 - File Format: CPP-readable reconstruction
