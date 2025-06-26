@@ -1,6 +1,5 @@
  Complex quantum control scenario—one that blends ideas from quantum computing, photon-electron interactions, 
- and quantum error correction. Let's unpack and refine your concept:
-
+ and quantum error correction. 
 🔹 Concept Summary:
 Proposing a system where:
 
