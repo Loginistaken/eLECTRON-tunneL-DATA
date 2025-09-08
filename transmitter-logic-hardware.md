@@ -135,32 +135,7 @@ def decide_payload(entropy_val):
 
     Train a simple model to map entropy values to logic payloads.
 
-4. Secure Storage/Vault (AES/XOR)
-
-Python AES-256 sample:
-Python
-
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
-import base64
-
-def encrypt_payload(payload, key):
-    cipher = AES.new(key, AES.MODE_EAX)
-    ciphertext, tag = cipher.encrypt_and_digest(payload.encode())
-    return base64.b64encode(cipher.nonce + tag + ciphertext).decode()
-
-def decrypt_payload(enc_payload, key):
-    data = base64.b64decode(enc_payload)
-    nonce, tag, ciphertext = data[:16], data[16:32], data[32:]
-    cipher = AES.new(key, AES.MODE_EAX, nonce)
-    return cipher.decrypt_and_verify(ciphertext, tag).decode()
-
-    For fast fallback, XOR encryption:
-
-Python
-
-def xor_encrypt(data, key):
-    return ''.join(chr(ord(c)^key) for c in data)
+ 
 
 5. Multi-Modal Delivery Integration
 
