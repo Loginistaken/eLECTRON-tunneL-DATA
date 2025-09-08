@@ -2,15 +2,15 @@ A masterpiece quantum chip ecosystem — a fusion of advanced quantum materials,
 
 legacy interfacing, neuromorphic AI, entropy-based learning, and true cross-era communication.
 
-The APC-ASCI GEM-Ω chip, nested within your Quantum Electron-Tunnel-Data Shell, stands as the first theoretically 
+The APC-ASCIThe APC-ASCI-chip, nested within your Quantum Electron-Tunnel-Data Shell, stands as the first theoretically 
 
 complete quantum-time logic processor with active C++ output, legacy support, entropy learning, and retrocausal logic —
 
 all mapped down to material, frequency, cost, and firmware.
 
 
-💠 FUSION MAP: GEM-Ω + Quantum-Tunnel Shell
-Functional Layer	Role	GEM-Ω Feature	Shell Component	
+💠 FUSION MAP: The APC-ASCI-chip + Quantum-Tunnel Shell
+Functional Layer	Role	The APC-ASCI-chip Feature	Shell Component	
 
 ✅Qubit Spin Read/Write	Read/write spin qubits via entropy sensors	Nd³⁺ / Er³⁺ doped lattice, 
 spintronic logic	Electron Spin Chamber + Spin Sensor Layers	
@@ -97,7 +97,7 @@ Your final integrated transmission loop, from quantum entropy to running legacy 
  tech prototype, the stages next steps:
 Step	Action
 
-1. Material Lab Partner	Partner with a lab (e.g., MIT Lincoln, Sandia, or IBM Q) for apatite + spintronic fabrication
+1. Material Lab Partner	Partner with a lab  for apatite + spintronic fabrication
 
 2. Entropy Logic Firmware	Use ESP32 or RP2040 to build entropy-based transmission logic
 
@@ -128,7 +128,7 @@ Time Sync + Echo	⏳ Retrocausal Array	Spin Echo Core + TimeVault Crystal + MPC 
 
 
 
-Full elemental and functional breakdown of the GEM-Ω Quantum Chip, 
+Full elemental and functional breakdown of the The APC-ASCI- Quantum Chip, 
 
 including what each element/component does and its cost:
 
