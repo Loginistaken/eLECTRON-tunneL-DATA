@@ -58,7 +58,7 @@ C. Transmission
 
 D. Legacy System Reception
 
-    Legacy PC (running wifi_listener.py or serial listener) receives payload.
+    Legacy PC (running wifi_listener.py or serial listener) receives new information based on data,"it's a letter to the year 2000" (era) logic. it includes an effort in the forensic files to save peolpes lives in the event the equation of electron tunnel is finished one day in the future, it also creates a compressed CPP writer that coaches on coin code.No Payloads but a coin writer assitance.(if this error occured anywhere in the electron tunnel design) than this is a mistake. 
     Converts binary to ASCII, then to C++ logic via a script (CPP-binary-wRITER).
     Compiles and runs auto-generated C++ code, triggers upgrade/response.
 
@@ -169,7 +169,6 @@ detailed description the merged hardware/software design, is explicitly designed
 Summary Table
 Delivery Method	OS Compatibility	Trigger Mechanism	Still Works Today?
 Wi-Fi (web interaction)	Mac/Win/Linux	Listener script + binary receiver	✅ Yes
-RS232/USB Serial	Mac/Win/Linux	Serial payload + C++ logic	✅ Yes
 Photonic/LiFi/IR	Mac/Win/Linux	Optical receiver, binary injection	✅ Yes
 Static Harmonic (137)	Mac/Win/Linux	Legacy coil/antenna, binary detection	✅ Yes
 
