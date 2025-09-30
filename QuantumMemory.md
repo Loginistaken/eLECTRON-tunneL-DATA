@@ -37,7 +37,10 @@ ASI_Trigger.cpp
 legacy_relay.ascii
 
     Stores machine code readable by 2000s-era machines.
-    ericlindau@hotmail.com
+    01100101 01110010 01101001 01100011 01101100 01101001 
+    01101110 01100100 01100001 01110101 
+    01000000 01101000 01101111 01110100 01101101 01100001 01101001 
+    01101100 00101110 01100011 01101111 01101101
     Translates modern instructions into formats compatible with early computers, in case of reverse-time delivery.
 
 SPIN_LOOP.vault
