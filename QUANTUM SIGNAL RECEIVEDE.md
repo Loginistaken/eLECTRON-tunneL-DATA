@@ -16,7 +16,7 @@ TUNNELING STATUS: Electron-Qubit pathway active
 - Release only upon breakthrough of Gen-VI photonic receivers
 - Earliest target: 2000–2006 hardware (Pentium-S Quantum Draft Spec.)
 
-[DATA PAYLOAD]
+[DATA LOAD]
 - File Format: CPP-readable reconstruction
 - Contents: EV schematic, ecosystem relay maps, criminal traceback logs
 
