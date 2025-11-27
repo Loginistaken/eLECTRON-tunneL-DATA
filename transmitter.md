@@ -174,3 +174,127 @@ Static Harmonic (137)	Mac/Win/Linux	Legacy coil/antenna, binary detection	✅ Ye
 
 In conclusion:
 The transmitter system, as architected, is fully capable of triggering 2000-era (and modern) Mac, Windows, and Linux systems through web (Wi-Fi) interaction or other physical means. It is OS-agnostic, requires minimal dependencies, and leverages universal binary/C++ logic—making it robust for both legacy and current environments.
+LOGIC 
+/* Simulated, safe, redacted version of the "Quantum-to-Legacy Transmitter System"
+   - Purpose: education/analysis only. All network/download/execute behavior removed.
+   - This program simulates sensing -> entropy -> decision -> "would generate" C++ payload.
+   - It reads local, trusted input files only (no network, no subprocess). */
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <chrono>
+#include <thread>
+#include <sstream>
+#include <unordered_map>
+
+// ---------- Configuration ----------
+const char* TRUSTED_INPUT_FILE = "trusted_input.bin"; // local-only, trusted test data
+const int SIMULATED_LISTENER_PORT = 4444; // informational only; not opened
+
+// ---------- Helpers ----------
+std::string binary_to_ascii(const std::string &binary_str) {
+    // Accepts whitespace-separated 8-bit tokens and converts to ASCII
+    std::istringstream iss(binary_str);
+    std::string token;
+    std::string out;
+    while (iss >> token) {
+        if (token.size() != 8) continue;
+        char c = static_cast<char>(std::stoi(token, nullptr, 2));
+        out.push_back(c);
+    }
+    return out;
+}
+
+std::string create_safe_cpp_stub(const std::string &msg) {
+    // Returns a small C++ source as text. This is only for preview; we DO NOT compile or run it.
+    std::ostringstream oss;
+    oss << "#include <iostream>\n";
+    oss << "int main() { std::cout << \"";
+    // escape quotes and backslashes in msg for safe embedding
+    for (char ch : msg) {
+        if (ch == '\\') oss << "\\\\";
+        else if (ch == '"') oss << "\\\"";
+        else if (ch == '\n') oss << "\\n";
+        else oss << ch;
+    }
+    oss << "\" << std::endl; return 0; }\n";
+    return oss.str();
+}
+
+// Very small deterministic "model" stub: maps an entropy float to a named action.
+std::string ml_decide_action(float entropy_val) {
+    if (entropy_val < 0.33f) return "log_only";
+    if (entropy_val < 0.66f) return "generate_message";
+    return "generate_verbose_message";
+}
+
+// Safe simulation of writing to a vault (local-only, non-sensitive demo)
+void vault_write(const std::string &name, const std::string &contents) {
+    std::ofstream f(name + ".vault.txt", std::ios::app);
+    if (!f) {
+        std::cerr << "[vault] WARNING: cannot open vault file\n";
+        return;
+    }
+    f << "=== " << std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+      << " ===\n";
+    f << contents << "\n\n";
+    f.close();
+    std::cout << "[vault] wrote to " << name << ".vault.txt (local only)\n";
+}
+
+// ---------- Main simulated flow ----------
+int main() {
+    std::cout << "Simulated Quantum-to-Legacy Listener (SAFE, REDACTED)\n";
+    std::cout << "No network sockets opened. No external downloads or executions performed.\n\n";
+
+    // 1) Simulated sensor/entropy input: read local trusted file
+    std::ifstream in(TRUSTED_INPUT_FILE);
+    if (!in) {
+        std::cout << "[info] Trusted input file '" << TRUSTED_INPUT_FILE << "' not found.\n";
+        std::cout << "[info] To test the simulation, create a local file named '" << TRUSTED_INPUT_FILE
+                  << "' containing whitespace-separated 8-bit binary tokens (e.g. 01001000 ...)\n";
+        return 0;
+    }
+    std::ostringstream buffer;
+    buffer << in.rdbuf();
+    std::string binary_stream = buffer.str();
+    in.close();
+
+    // 2) Decode binary -> ASCII (safe)
+    std::string ascii_msg = binary_to_ascii(binary_stream);
+    std::cout << "[decode] Decoded ASCII message (preview):\n";
+    std::cout << "-----BEGIN MESSAGE-----\n" << ascii_msg << "\n-----END MESSAGE-----\n\n";
+
+    // 3) Simulate an entropy measurement (derivable from binary content)
+    float entropy_val = 0.5f; // deterministic placeholder for demo purposes
+    // For a real analysis, compute a numeric metric from the bitstream (not done here)
+    std::string action = ml_decide_action(entropy_val);
+    std::cout << "[ml] Deterministic decision from entropy (" << entropy_val << "): " << action << "\n\n";
+
+    // 4) Based on decision, generate a safe C++ payload preview (we DO NOT write/compile/run)
+    std::string payload_message;
+    if (action == "log_only") {
+        payload_message = "Simulated payload: log-only action triggered.";
+    } else if (action == "generate_message") {
+        payload_message = "Simulated payload: hello from safe simulation.";
+    } else { // generate_verbose_message
+        payload_message = "Simulated payload: verbose message - simulation only.";
+    }
+
+    std::string cpp_preview = create_safe_cpp_stub(payload_message);
+    std::cout << "[payload-preview] The listener WOULD generate the following C++ source (preview only):\n";
+    std::cout << "-----BEGIN CPP PREVIEW-----\n" << cpp_preview << "-----END CPP PREVIEW-----\n\n";
+
+    // 5) Vault/record the decoded message and preview locally for analysis
+    vault_write("decoded_message", ascii_msg);
+    vault_write("cpp_preview", cpp_preview);
+
+    // 6) Final note and safe guidance
+    std::cout << "Simulation complete. This program is intentionally inert: it does NOT:\n";
+    std::cout << "  - open network ports;  - download files;  - invoke compilers;  - execute generated binaries.\n";
+    std::cout << "If you want a line-by-line annotated redaction of your original file, I can produce that next.\n";
+
+    return 0;
+}
