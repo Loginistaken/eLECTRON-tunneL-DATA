@@ -1,4 +1,4 @@
-does this new code a compressed CPP COIn writer tell me what this system does // Cleaned and consolidated version of CPP-writer-wBinarytranslator.cpp
+// Cleaned and consolidated version of CPP-writer-wBinarytranslator.cpp
 // Source: https://github.com/Loginistaken/eLECTRON-tunneL-DATA/blob/bf77216598473b374c0ce0795b621fc83f52b46f/CPP-writer-wBinarytranslator.cpp
 //
 // Notes:
