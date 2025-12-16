@@ -1,3 +1,285 @@
+// ============================================================================
+// EDUCATIONAL BINARY TRANSLATOR + DEMO CODE-LISTER WITH SIMULATED TRIGGER
+// Clean, Safe, Non-Destructive Version + Email & Modem Simulation
+// Updated: 2025-12-16
+// Target: C++11
+// Notes: Fixes for portability, correctness, and safety.
+// ============================================================================
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <vector>
+#include <sstream>
+#include <map>
+#include <thread>
+#include <chrono>
+#include <iomanip>
+#include <ctime>
+#include <algorithm>
+#include <cctype>
+#include <cstring>
+#include <bitset>
+
+#ifdef _WIN32
+  #include <io.h>    // _mkdir
+  #include <direct.h>
+#else
+  #include <sys/stat.h>  // mkdir on Unix/Mac
+  #include <sys/types.h>
+  #include <errno.h>
+#endif
+
+// libcurl (C API is already C-compatible)
+#include <curl/curl.h>
+
+// -------------------- Utility: Binary -> ASCII --------------------
+std::string binaryToAscii(const std::string& bits) {
+    std::string out;
+    for (size_t i = 0; i + 8 <= bits.size(); i += 8) {
+        std::string byte = bits.substr(i, 8);
+        if (byte.find_first_not_of("01") != std::string::npos) continue;
+        std::bitset<8> bs(byte);
+        char c = static_cast<char>(bs.to_ulong());
+        out += c;
+    }
+    return out;
+}
+
+// Read a text file containing 0/1 characters (ignores whitespace)
+std::string loadBinaryFile(const std::string& filePath) {
+    std::ifstream fin(filePath.c_str());
+    if (!fin) {
+        std::cerr << "[ERROR] Could not open file: " << filePath << "\n";
+        return "";
+    }
+    std::string bits((std::istreambuf_iterator<char>(fin)),
+                      std::istreambuf_iterator<char>());
+    bits.erase(std::remove_if(bits.begin(), bits.end(),
+        [](char ch){ return std::isspace(static_cast<unsigned char>(ch)); }),
+        bits.end());
+    return bits;
+}
+
+// -------------------- Safe Directory Path (Manual Creation) --------------------
+bool ensureDirectory(const std::string& path) {
+#ifdef _WIN32
+    int r = _mkdir(path.c_str());
+    if (r == 0 || errno == EEXIST) return true;
+    return false;
+#else
+    if (mkdir(path.c_str(), 0755) == 0) return true;
+    if (errno == EEXIST) return true;
+    return false;
+#endif
+}
+
+std::string getOutputPath() {
+    std::string base = "./SafeOutput";
+    ensureDirectory(base);
+    return base + "/translated_output.txt";
+}
+
+// -------------------- Light Obfuscation (Safe, Transparent) --------------------
+std::string simpleObfuscate(const std::string& input) {
+    std::string out = input;
+    for (char& c : out) c ^= 0x03;  // Small reversible transform
+    return out;
+}
+
+// -------------------- Friendly Spin Interpreter --------------------
+class SpinInterpreter {
+public:
+    SpinInterpreter() {
+        map_['U'] = "01";
+        map_['D'] = "10";
+        map_['L'] = "11";
+        map_['-'] = "00";
+    }
+
+    void run(const std::string& stream) {
+        std::ofstream log("spin_log.txt", std::ios::app);
+        for (char s : stream) {
+            std::string b = decode(s);
+            if (log) log << b << "\n";
+            if (b == "01") std::cout << "[UP] Action: Data acknowledgement\n";
+            else if (b == "10") std::cout << "[DOWN] Action: Reset event\n";
+            else if (b == "11") std::cout << "[LOOP] Action: Synchronization signal\n";
+            else std::cout << "[IDLE] No action\n";
+            std::this_thread::sleep_for(std::chrono::milliseconds(150));
+        }
+    }
+
+private:
+    std::map<char, std::string> map_;
+    std::string decode(char c) const {
+        auto it = map_.find(c);
+        return (it != map_.end()) ? it->second : "00";
+    }
+};
+
+// -------------------- Timestamp Helper --------------------
+std::string getTimeStamp() {
+    std::time_t now = std::time(nullptr);
+    std::tm tbuf;
+#if defined(_WIN32)
+    localtime_s(&tbuf, &now);
+    std::tm* t = &tbuf;
+#else
+    std::tm* t = std::localtime(&now);
+#endif
+    std::ostringstream oss;
+    oss << (t->tm_year + 1900) << '-'
+        << std::setfill('0') << std::setw(2) << (t->tm_mon + 1) << '-'
+        << std::setfill('0') << std::setw(2) << t->tm_mday << ' '
+        << std::setfill('0') << std::setw(2) << t->tm_hour << ':'
+        << std::setfill('0') << std::setw(2) << t->tm_min << ':'
+        << std::setfill('0') << std::setw(2) << t->tm_sec;
+    return oss.str();
+}
+
+// -------------------- Simulated Modem Activation at 137Hz --------------------
+void simulateModemActivation() {
+    std::cout << "[SIM] Activating modem at 137Hz (simulated pulse)...\n";
+    for (int i = 0; i < 137; ++i) {
+        std::cout << "." << std::flush;
+        std::this_thread::sleep_for(std::chrono::milliseconds(7));  // rough sim
+    }
+    std::cout << "\n[SIM] Modem activated - ready for trigger.\n";
+}
+
+// -------------------- Auto Email Send Function (Libcurl with TLS) --------------------
+struct upload_status {
+    size_t bytes_read;
+    const char* data;
+    size_t total;
+};
+
+static size_t read_cb(void* ptr, size_t size, size_t nmemb, void* userp) {
+    upload_status* upload_ctx = static_cast<upload_status*>(userp);
+    size_t room = size * nmemb;
+    if (upload_ctx->bytes_read >= upload_ctx->total) return 0;
+    size_t left = upload_ctx->total - upload_ctx->bytes_read;
+    size_t to_copy = (left < room) ? left : room;
+    std::memcpy(ptr, upload_ctx->data + upload_ctx->bytes_read, to_copy);
+    upload_ctx->bytes_read += to_copy;
+    return to_copy;
+}
+
+bool sendAutoEmail() {
+    CURL* curl = nullptr;
+    CURLcode res = CURLE_OK;
+    struct curl_slist* recipients = NULL;
+    upload_status upload_ctx = {0, nullptr, 0};
+
+    // NOTE: DO NOT hardcode real credentials in source.
+    // Replace placeholders below with secure retrieval (env, vault, prompt).
+    std::string body = "This is a letter from the year 2000.\nTime capsule activated in " + getTimeStamp() + ".\n";
+    std::string full_payload =
+        "Date: " + getTimeStamp() + "\r\n"
+        "To: <ericlindau@hotmail.com>\r\n"
+        "From: <YOUR_SENDER_EMAIL@outlook.com>\r\n"
+        "Subject: LETTER FROM THE YEAR 2000\r\n"
+        "\r\n" + body + "\r\n";
+
+    upload_ctx.data = full_payload.c_str();
+    upload_ctx.total = std::strlen(upload_ctx.data);
+    upload_ctx.bytes_read = 0;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+    curl = curl_easy_init();
+    if (!curl) {
+        curl_global_cleanup();
+        std::cerr << "[ERROR] curl initialization failed\n";
+        return false;
+    }
+
+    // Credentials (REPLACE THESE - use app password if MFA on)
+    curl_easy_setopt(curl, CURLOPT_USERNAME, "YOUR_SENDER_EMAIL@outlook.com");
+    curl_easy_setopt(curl, CURLOPT_PASSWORD, "YOUR_APP_PASSWORD");
+
+    // Use STARTTLS SMTP
+    curl_easy_setopt(curl, CURLOPT_URL, "smtp://smtp.live.com:587");
+    curl_easy_setopt(curl, CURLOPT_USE_SSL, (long)CURLUSESSL_ALL);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 1L);
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST, 2L);
+
+    // Sender and recipient
+    curl_easy_setopt(curl, CURLOPT_MAIL_FROM, "<YOUR_SENDER_EMAIL@outlook.com>");
+    recipients = curl_slist_append(recipients, "<ericlindau@hotmail.com>");
+    curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, recipients);
+
+    // Payload callback
+    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_cb);
+    curl_easy_setopt(curl, CURLOPT_READDATA, &upload_ctx);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);  // toggle for debug
+
+    res = curl_easy_perform(curl);
+    if (res != CURLE_OK) {
+        std::cerr << "[ERROR] Email send failed: " << curl_easy_strerror(res) << "\n";
+    } else {
+        std::cout << "[SUCCESS] Email triggered and sent.\n";
+    }
+
+    if (recipients) curl_slist_free_all(recipients);
+    curl_easy_cleanup(curl);
+    curl_global_cleanup();
+    return (res == CURLE_OK);
+}
+
+// -------------------- Main --------------------
+int main(int argc, char* argv[]) {
+    std::cout << "=== Safe Educational Binary Translator + Trigger Sim ===\n";
+    std::cout << "Runtime Timestamp: " << getTimeStamp() << "\n";
+    std::cout << "-------------------------------------------\n";
+
+    // Simulated transmitter binary code (wireless intro signal)
+    std::string transmitter_binary =
+        "010000010100001101010100010010010101011001000001010101000100010101001100001100010011001101110011";  // "ACTIVATE137"
+    std::cout << "[SIM] Receiving wireless transmitter signal (binary): " << transmitter_binary << "\n";
+    std::string decoded_trigger = binaryToAscii(transmitter_binary);
+    std::cout << "[Decoded Trigger] " << decoded_trigger << "\n";
+
+    if (decoded_trigger == "ACTIVATE137") {
+        std::cout << "[TRIGGER] Match found - jogging old logic (2002+ sim).\n";
+        simulateModemActivation();
+        std::cout << "[SIM] Triggering GPU per se for task initiation...\n";  // GPU sim placeholder
+        // Email will fail unless valid credentials are provided and network access allowed.
+        sendAutoEmail();
+    } else {
+        std::cout << "[WARN] No trigger match - skipping email/modem.\n";
+    }
+
+    if (argc > 1) {
+        std::string filePath = argv[1];
+        std::cout << "[INFO] Loading binary file: " << filePath << "\n";
+        std::string bits = loadBinaryFile(filePath);
+        if (!bits.empty()) {
+            std::string ascii = binaryToAscii(bits);
+            std::cout << "[Decoded Text] " << ascii << "\n";
+            std::string outPath = getOutputPath();
+            std::ofstream fout(outPath.c_str());
+            if (fout) {
+                fout << ascii;
+                std::cout << "[INFO] Saved translation to: " << outPath << "\n";
+            } else {
+                std::cerr << "[ERROR] Could not write output file: " << outPath << "\n";
+            }
+        } else {
+            std::cout << "[WARN] File contained no usable binary.\n";
+        }
+    } else {
+        std::cout << "[INFO] No binary file provided.\n";
+        std::cout << "      Usage: program <binary_file.txt>\n";
+    }
+
+    std::cout << "\n--- Spin Interpreter Demo ---\n";
+    SpinInterpreter spin;
+    spin.run("UDL-UL");
+
+    std::cout << "\n[INFO] Program finished safely.\n";
+    return 0;
+}
 // Cleaned and consolidated version of CPP-writer-wBinarytranslator.cpp
 
 
