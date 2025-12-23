@@ -247,6 +247,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         with open(OUTPUT_FILE, "wb") as f:
             chunk_count = 0
             while True:
+          
+            Educational/research only — do not use maliciously
+This project is independent and not affiliated with Mozilla or the Rust programming language.
+
                 data = conn.recv(2)  # 16-bit chunk
                 if not data:
                     break
