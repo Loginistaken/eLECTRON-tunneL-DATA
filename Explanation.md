@@ -4,9 +4,13 @@
     (electron spins) to ordinary computers. Think of it as a translator: one side speaks quantum
     (electron spins and tunneling events), the other side speaks classical (binary signals, C++ code). 
     The repo’s description and files show a goal of reading spin information, encoding it into classical signals 
-    (the project calls out a 137 MHz encoding band), and delivering that information to everyday systems across Mac, Windows, and Linux.
+    (the project calls out a 137 MHz encoding band), and delivering that information to everyday systems across Mac, 
+    Windows, and Linux.
 
-    A little more detail (what pieces exist). The repository contains documents about capturing and transmitting qubit data (files like 02capture, interpret, transmit qubit-based info.md, transmitter.md), memory and buffering for quantum data (QuantumMemory.md), hardware concepts (APC‑ASCI chip, WizDimensional‑chip docs), experiment plans and testbeds (The‑Corundum‑concept‑experiment* files), and software/logic guidance (transmitter‑logic and coin‑write‑guide, Binary,modern-code.md). There are also images and a C++ file stub, which indicate both hardware diagrams and a code output target.
+    A little more detail (what pieces exist). The repository contains documents about capturing and transmitting qubit data (files like 02capture, interpret, transmit qubit-based info.md, transmitter.md), memory and buffering for quantum data (QuantumMemory.md), 
+    hardware concepts (APC‑ASCI chip, WizDimensional‑chip docs), experiment plans and testbeds (The‑Corundum‑concept‑experiment* files),
+    and software/logic guidance (transmitter‑logic and coin‑write‑guide, Binary,modern-code.md). There are also images and a C++ file stub,
+    which indicate both hardware diagrams and a code output target.
 
     Why this matters (practical plain-language reason). Electron spin qubits can carry information in ways that classical bits cannot. 
     If we can reliably read spins and turn them into classical bits, we can use quantum information where a normal program or a legacy
